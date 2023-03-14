@@ -58,7 +58,7 @@ public class FlinkSqlGenerator {
       TypeConvert typeConvert = TypeConvert.of(nameValue.value);
 
       if (TypeConvert.Complex.equals(typeConvert)) {
-        builder.append("<ROW ");
+        builder.append("ROW<");
         builder.append(convert((com.alibaba.fastjson2.JSONObject) nameValue.value, false));
         builder.append(">,");
       } else if (TypeConvert.Array.equals(typeConvert)) {
