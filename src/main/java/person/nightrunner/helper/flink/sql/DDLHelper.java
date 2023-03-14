@@ -2,10 +2,6 @@ package person.nightrunner.helper.flink.sql;
 
 import com.alibaba.fastjson2.JSONObject;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,25 +9,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public class FlinkSqlGenerator {
+import static person.nightrunner.helper.flink.sql.Constants.DEFAULT_TABLE_NAME;
 
-  public static void main(String[] args) {
-    String content;
-    try {
-      content =
-          Files.readString(
-              Path.of(ClassLoader.getSystemClassLoader().getResource("input.properties").toURI()));
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    } catch (URISyntaxException e) {
-      throw new RuntimeException(e);
-    }
-
-    System.out.println(byJson(content));
-  }
-
-  public static String byJson(String json) {
-    return "CREATE TABLE table_name AS (\n" + convert(json, true) + "\n) WITH (  );";
+public class DDLHelper {
+  public static String getCreateTable(String json) {
+    return "CREATE TABLE "
+        + DEFAULT_TABLE_NAME
+        + " AS (\n"
+        + convert(json, true)
+        + "\n) WITH (  );";
   }
 
   private static String convert(com.alibaba.fastjson2.JSONObject jsonObject, boolean fileNewLine) {
@@ -120,6 +106,10 @@ enum TypeConvert {
   private String flinkSQLType;
 
   public static TypeConvert of(Object value) {
+
+    if(value == null){
+      System.out.println(value);
+    }
 
     String[] formats = new String[] {"yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd"};
 
